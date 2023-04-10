@@ -27,19 +27,21 @@ then
     rm $OUTPUT
 fi
 
-if [[ -d $WORKSPACE ]]
+if [[ ! -d $WORKSPACE ]]
 then
-    rm -rf $WORKSPACE;
+    mkdir $WORKSPACE 
 fi
 
-mkdir $WORKSPACE 
 cd $WORKSPACE 
 # XXX requires the gh-cli tool installed (e.g. brew install gh)
 for repository in $(gh repo list $ORG --limit 200 --json name | jq -r .[].name)
 do
     # Iterate over cloning each repo.
     echo $repository;
-    git clone git@github.com:$ORG/$repository
+    if [[ ! -d $repository ]]
+    then
+        git clone git@github.com:$ORG/$repository
+    fi
     echo "Project: " $repository >> $OUTPUT 
     cd $repository
     # only list branches beyond 180 of inactivity
