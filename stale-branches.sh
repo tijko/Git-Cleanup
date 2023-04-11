@@ -51,7 +51,7 @@ do
         branch_name=$(cut -d'/' -f4- <<< $branch);
         if [[ $branch_name != "HEAD" && $branch_name != "main" && $branch_name != "master" && $branch_name != "develop" ]]
         then
-            echo "    Time: $timestamp Branch: $branch_name" >> $OUTPUT
+            echo "    Date: $timestamp Branch: $branch_name" >> $OUTPUT
             # XXX uncomment to permanently delete branches from remote
             #git push origin -d $branch_name
         fi
