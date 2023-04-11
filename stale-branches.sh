@@ -16,8 +16,9 @@ fi
 echo "Running for $ORG"
 
 WORKSPACE="Workspace"
-OUTPUT="$HOME/Stale-Branches.txt"
+OUTPUT="$PWD/Stale-Branches.txt"
 # XXX Default to 180 days adjust as needed
+#     Set this value as needed
 PERIOD=180
 TARGET=$(date -v -"$PERIOD"d "+%Y-%m-%d")
 echo "Any branches without activity from $TARGET will be removed"
@@ -33,7 +34,13 @@ then
 fi
 
 cd $WORKSPACE 
-# XXX requires the gh-cli tool installed (e.g. brew install gh)
+
+GHCLI=$(which gh)
+if [[ -z $GHCLI ]]
+then
+    $(brew install gh && gh auth login)
+fi
+
 for repository in $(gh repo list $ORG --limit 200 --json name | jq -r .[].name)
 do
     # Iterate over cloning each repo.
